@@ -21,42 +21,60 @@ export default class Login extends Component {
                 [e.target.name]: e.target.value
             }
         });
-        console.log(this.state.form) //imprimir todo el estado 
     }
 
     iniciarSesion = async () => {
         await axios.get(URL,{params:{username:this.state.form.username}})
         .then((response) =>{return response.data})
         .then((response) =>{
-            console.log(response.username)
-            if (response.length) {
-                axios.get(URL,{params:{password:md5(this.state.form.password)}})
+                    if (response.length) {
+                axios.get(URL,{params:{username:this.state.form.username, password:md5(this.state.form.password)}})
                 .then((response) =>{return response.data})
                 .then((response) =>{
                 if (response.length) {
+                    console.log(response[0])
                 let lengthResponse = response[0]
                 alert(`Bienvenido ${lengthResponse.nombre} ${lengthResponse.primer_apellido}`)
+                localStorage.setItem('TipoUsuario', lengthResponse.tipoUsuario);
+                localStorage.setItem('idUsuario', lengthResponse.id);
+                localStorage.setItem('Nombre', lengthResponse.nombre);
+                localStorage.setItem('Foto', lengthResponse.foto);
+                this.props.history.push('/navbar');
                 }else{
                     alert(`Clave incorrecta`)
                 }
             })
             } else {
+                
                 alert('usuario no registrado')
             }
 
         })
     }
-
+    invitado = () => {
+        localStorage.setItem('Invitado',1);
+    }
+    
     handleSubmit = (e) => {
         e.preventDefault()
+        localStorage.setItem('Invitado',0);
         this.iniciarSesion()
     }
     render() {
 
         return (
-            <div>
+            <div className="container">
+            
             <form className="form-signin" onSubmit={this.handleSubmit}>
-                <h1 className="h4 mb-3 font-weight-normal">
+            <img 
+                    className="fadeimg "
+                    src="https://res.cloudinary.com/dky22nhv5/image/upload/v1631157616/logo_jqmfzn.png" 
+                    id="icon" 
+                    alt="User Icon" 
+                    width="200px"
+                    
+                    />
+                <h1 className="h4 mb-3 font-weight-normal"style={{color:"#fff", margin:"10px"}}>
                     Inicio de sesión
                 </h1>
 
@@ -82,12 +100,12 @@ export default class Login extends Component {
 
                 <button
                     type="submit"
-                    className="btn btn-primary btn-block"
+                    className="btn btn-primary"
                 >
                     Login
                 </button>
 
-                <div className="">
+                <div className="networks">
                     <p>Login with social networks</p>
 
                     <div className="google-btn btn-primary">
@@ -104,6 +122,13 @@ export default class Login extends Component {
                     className="Link"
                    >
                     Crear una nueva cuenta
+                </Link>
+                <Link
+                    to="/navbar"
+                    className="Link"
+                    onClick={this.invitado}
+                   >
+                    Ingresar como invitado
                 </Link>
             </form>
         </div>

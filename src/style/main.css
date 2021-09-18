@@ -2,18 +2,33 @@
     width: 80%;
     max-width: 330px;
     padding: 10px;
-    margin: auto;
+    margin: 2rem auto;
+    align-items: center;
   }
-  
+
   .form-signin .form-control {
     position: relative;
     box-sizing: border-box;
     height: auto;
     padding: 10px;
     font-size: 16px;
+    
   }
+  .h4{
+    margin: auto ;
+    color: rgb(7, 6, 6);
+    display: flex;
+    justify-content: center;
+    margin: 1rem auto;
+    
+   }
   .form-signin .form-control:focus {
     z-index: 1;
+ 
+  }
+  .networks{
+    margin: 1rem auto ;
+    color: #fff;
   }
   .form-signin input[type="email"] {
     margin-bottom: -1px;
@@ -44,19 +59,23 @@
     width: 40px;
     height: 40px;
     border-radius: 2px;
+ 
 }
-
+.h3{
+  color:#fff;
+  padding-top: 1rem;
+}
 .google-icon {
     position: absolute;
     margin-top: 11px;
-    margin-left: 11px;
+    margin-left: 71px;
     width: 18px;
     height: 18px;
 }
 
 .btn-text {
     float: right;
-    margin: 11px 40px 0 0;
+    margin: 11px 80px 0 0;
     font-size: 14px;
     letter-spacing: 0.2px;
 }
@@ -84,6 +103,7 @@
     }
     
     body {
+      
       margin: 0;
       padding: 0;
       font-family: sans-serif;
@@ -93,6 +113,22 @@
         sans-serif;
     }
 
+.background{
+  background-color:#0F0E17;
+}
 
+.form-signin .Link{
+  display: flex;
+  justify-content: center;
+  margin: 1rem auto;
+}
+.form-entrar .form-control{
+  width: 27rem;
 
-
+  margin: 0.2rem auto;
+  display: flex;
+}
+.fadeimg{
+  margin: auto;
+  display: flex;
+}

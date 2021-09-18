@@ -2,28 +2,52 @@ import React, { Component } from "react";
 import axios from "axios";
 import md5 from "md5";
 import uuid from "react-uuid";
-import { withRouter } from 'react-router-dom';
 import { Link } from "react-router-dom";
 import swal from 'sweetalert';
+import {fileUpload} from '../helpers/fileUpload';
 
-
-const baseUrl = "https://appmoviesoscar.herokuapp.com/usuario";
+const baseUrl = "https://appmoviesoscar.herokuapp.com/usuario/";
 
 export default class Registro extends Component {
 
     constructor() {
         super();
         this.state = {
-            data: [],
+             data: [],
+             modalInsertar: false,
             form: {
                 id: '',
                 primer_apellido: '',
                 segundo_apellido: '',
                 nombre: '',
                 username: '',
-                password: ''
+                password: '',
+                foto:'',
+                tipoUsuario:'',
+                validar: "",
+                clavPre: "2030"
             }
         }
+    }
+    handlePictureClick = () => {
+        document.querySelector('#fileSelector').click();
+    }
+    modalInsertar2 = () => {
+        this.setState({modalInsertar: false})
+    }
+    modalInsertar = () => {
+        this.setState({modalInsertar: true})
+    }
+    handleFileChange = (e) => {
+        const file = e.target.files[0];
+        fileUpload(file)
+        .then(response => {
+            
+            document.getElementById('image').value = response;
+            
+        }).catch(error => {
+            console.log(error.message)
+        })
     }
 
     handleChange = async e => {
@@ -34,15 +58,13 @@ export default class Registro extends Component {
             }
         });
         console.log(this.state.form)
-        console.log("hola")
     }
-    
+      
     handleSubmit = (e) => {
         e.preventDefault();
+        this.modalInsertar2()
         this.valida();
        document.getElementById("formulario").reset();
-       
-       
     }
 
     RegistroUsuario = async () => {
@@ -52,7 +74,9 @@ export default class Registro extends Component {
             segundo_apellido: this.state.form.segundo_apellido,
             nombre: this.state.form.nombre,
             username: this.state.form.username,
-            password: md5(this.state.form.password)
+            password: md5(this.state.form.password),
+            foto: this.state.form.foto,
+            tipoUsuario:this.state.form.tipoUsuario,
         }).then(response => {
             swal({
                 title: "!Usuario Registrado!",
@@ -66,7 +90,9 @@ export default class Registro extends Component {
         })
         
     }
+
     valida = async (e) => {
+        
     await axios.get(baseUrl,{params:{username:this.state.form.username}})
     .then((response) =>{return response.data})
     .then((response) =>{
@@ -78,7 +104,18 @@ export default class Registro extends Component {
                 button: "Intentar de nuevo",
                 });
         }else{
+            if(this.state.modalInsertar){
+            if(this.state.form.validar === this.state.form.clavPre){
             this.RegistroUsuario();
+            }else{
+                swal({
+                    title: "!Clave de registro como administrador es incorrecta!",
+                    icon: "warning",
+                    button: "Intentar de nuevo",
+                    });
+            }}else{
+                this.RegistroUsuario();
+            }
         }
     })
 }
@@ -92,13 +129,45 @@ export default class Registro extends Component {
                     </h1>
                     <div className="fadeIn first ">
                     <img 
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS689Xb1GJwNGzZl9KR7CTRKAZFaXt1060H32xPbb8hw_NXNpJ409Sl-aLnPsJQUfKJnYEV_KndttR1bbUKS_f7DGE3OP59H1Y&usqp=CAU&ec=45725305" 
+                    className="fadeimg "
+                    src="https://res.cloudinary.com/dky22nhv5/image/upload/v1631157616/logo_jqmfzn.png" 
                     id="icon" 
                     alt="User Icon" 
-                    width="100px"/>
-                    <h3>Crea una cuenta</h3>
+                    width="200px"
+                    
+                    />
+                    <h3 className="h3">Crea una cuenta</h3>
                 </div>
+                           <input 
+                            id="fileSelector"
+                            type="file"
+                            name="file"
+                            style={{display:'none'}}
+                            onChange={this.handleFileChange}
+                            />
+                        <button className="btn btn-success" 
+                            onClick={this.handlePictureClick}  style={{marginTop: "-5px"}}
+                            >Foto de perfil</button>
 
+                        <input 
+                            type="text"
+                            name="foto"
+                            style={{marginLeft: "5px"}}
+                            id="image"
+                            onBlur={this.handleChange}
+                            onChange={this.handleChange}
+                            required
+                            />
+                       
+                <input
+                        type="text"
+                        name="nombre"
+                        className="form-control"
+                        placeholder="nombre"
+                        required=""
+                        onChange={this.handleChange}
+                    />
+                    
                     <input
                         type="text"
                         placeholder="Primer Apellido"
@@ -120,15 +189,6 @@ export default class Registro extends Component {
                     />
 
                     <input
-                        type="text"
-                        name="nombre"
-                        className="form-control"
-                        placeholder="nombre"
-                        required=""
-                        onChange={this.handleChange}
-                    />
-
-                    <input
                         type="email"
                         name="username"
                         className="form-control"
@@ -140,6 +200,41 @@ export default class Registro extends Component {
                     <input
                         type="Password"
                         name="password"
+                        className="form-control"
+                        placeholder="Password"
+                        required=""
+                        onChange={this.handleChange}
+                    />
+                                  <div required="" className="form-group">
+                        <p>Tipo registro</p>
+                        <label title="Seleccione una opción" className="radiobox">
+                          <input
+                            name="tipoUsuario"
+                            value="usuario"
+                            type="radio"
+                            required
+                            active
+                            className="input-radio"
+                            onChange={this.handleChange}
+                            onClick={this.modalInsertar2}
+                          /> Usuario</label>
+                
+                       <label
+                        title="Seleccione una opción" className="radiobox">
+                        <input
+                            name="tipoUsuario"
+                            value="administrador"
+                            type="radio"
+                            required=""
+                            className="input-radio"
+                            onChange={this.handleChange}
+                            onClick={this.modalInsertar}
+                        /> Administrador</label>
+                     </div>
+                     <input
+                        hidden={ this.state.modalInsertar?  false : true}
+                        type="Password"
+                        name="validar"
                         className="form-control"
                         placeholder="Password"
                         required=""
