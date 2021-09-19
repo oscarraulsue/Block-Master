@@ -11,6 +11,7 @@ import Navbar from '../components/Navbar';
 import Registro from '../components/Registro';
 import Tarjeta from '../components/Tarjeta';
 import Usuario from '../components/Usuario';
+import VerDespues from '../components/VerDespues';
 
 
 
@@ -25,6 +26,7 @@ export default class AppRouter extends Component {
                     <Route path="/usuario" exact component={Usuario} />
                     <Route path="/tarjeta" exact component={Tarjeta} />
                     <Route path="/gestion" exact component={Gestion} />
+                    <Route path="/verdespues" exact component={VerDespues} />
                 </Switch>
             </Router>
         )

@@ -10,6 +10,7 @@ import  Carousel  from './Carousel';
 
 
 
+
 const Navbar = () => {
     const classes = useStyles();
     const [search, setSearch] = useState('')
@@ -19,6 +20,7 @@ const Navbar = () => {
     const [menosValor, setMenosValor] = useState(false)
     const [open, setOpen] = useState(false);
     const [ediAct, setEdiAct] = useState(false);
+    const [ediAct2, setEdiAct2] = useState(false);
     const [foto, setFoto] = useState("");
     const [nombre, setNombre] = useState("");
     const [ediAct1, setEdiAct1] = useState("Todas las peliculas")
@@ -50,23 +52,33 @@ const Navbar = () => {
         setAll(false)
         setEdiAct1("Peliculas más valoradas")
     }
-    const clear = () => {
+  
+     const clear = () => {
         localStorage.clear()
-        
-    }
+         }
     
     useEffect(() => {
         searchref.current.focus()
         let editor = localStorage.getItem('TipoUsuario')   
+        let editor2 = localStorage.getItem('Invitado')  
         setFoto(localStorage.getItem('Foto'))
         setNombre(localStorage.getItem('Nombre'))
+       
+
+        console.log(ediAct2)
+        if (editor2 === "true") {
+            setEdiAct2(true)
+        } else {
+            setEdiAct2(false)
+        }
+
         if (editor === "administrador") {
             setEdiAct(true)
         } else {
             setEdiAct(false)
         }
+    }, [ediAct2] )
 
-    }, [])
 
     return (
 
@@ -103,6 +115,7 @@ const Navbar = () => {
                 </form>
                
                 <Avatar
+                   hidden={ediAct2 ? true : false }
                     alt=""
                     className={classes.logo}
                     onClick={() => setOpen(true)}
@@ -110,12 +123,18 @@ const Navbar = () => {
                     style={{marginTop:".5rem", width: 60, height: 60, cursor: 'pointer'}}
                 />
                 <h1
-                
+                hidden={ediAct2 ? true : false }
                 className={classes.logo}
                 onClick={() => setOpen(true)}
                 style={{marginLeft:".5rem", marginTop:".9rem",textAlign:"center", color:"white", width: 66, fontSize: "22px", cursor: 'pointer' }}
                 >hola {nombre}!</h1>
-                
+                 <Link
+                 hidden={ediAct2 ? false : true }
+                 onCkicl={clear}
+                            to="/"
+                            >
+                    Iniciar Seción
+                        </Link>
             </div>
 
 
@@ -140,7 +159,7 @@ const Navbar = () => {
                         </Link>
 
                         <Link
-                            to=""
+                            to="/verdespues"
                             className={classes.menul2}
                             spy={true}
                             smooth={true}
@@ -180,7 +199,7 @@ const Navbar = () => {
                 }
             </Drawer>
             <Carousel />
-            <h1 style={{fontSize: "50px",marginTop:"30px", color: "white"}}>{ediAct1}</h1>
+            <h1 style={{fontSize: "50px",marginTop:"30px",marginLeft:"40px", color: "white"}}>{ediAct1}</h1>
             <App
                 setMenosValor={menosValor}
                 setAll={all}
@@ -227,7 +246,7 @@ const useStyles = makeStyles((theme) => ({
         "&:hover": {
             cursor: "pointer",
             color: "yellow",
-            paddingLeft: "5px",
+            paddingTop: "5px",
         },
         [theme.breakpoints.down("sm")]: {
             fontSize: ".8rem",

@@ -55,10 +55,10 @@ function App({ setMenosValor, setAll, setMasValor, setsearch }) {
     console.log(end)
     console.log(peli)
     let peliImp = peli1.slice(0, end)
+
+    
     return (
-        <>
-       
-   
+        <> 
             <InfiniteScroll
                 dataLength={peliImp.length}
                 next={() => setEnd(end + 2)}

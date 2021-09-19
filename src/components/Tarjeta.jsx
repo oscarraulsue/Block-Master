@@ -11,8 +11,13 @@ function Tarjeta() {
     const [stateTaks, setStateTaks] = useState([])
     const [vid, setVid] = useState([])
     const classes = useStyles();
-
-    const { title, poster_path, overview,  release_date, original_language } = stateTaks;
+    let verDespues= [];
+    let comprobar1 = JSON.parse(localStorage.getItem('MasTarde'));
+    if( comprobar1 !== null){
+        verDespues  = JSON.parse(localStorage.getItem('MasTarde'));
+        console.log(verDespues)
+    }
+    const { title, poster_path, overview, vote_average, release_date, original_language,id} = stateTaks;
 
 
 
@@ -25,8 +30,32 @@ function Tarjeta() {
         setVid(data2.key)
     }
 
-    const handleReturn = () => {
-      
+    const guarda = () => {
+        let guardaPeli = {
+            title, 
+            poster_path, overview,  
+            release_date, 
+            original_language,
+            vote_average,
+            id
+        }
+
+        verDespues.push(guardaPeli)
+        localStorage.setItem('MasTarde', JSON.stringify(verDespues))
+    }
+    const handleMasTarde = () => {
+        let verificar = JSON.parse(localStorage.getItem("MasTarde"))
+        if(verificar && verificar.length){
+            let verifica = verificar.find(ver => ver.id === id)
+            if(!verifica){
+                guarda()
+                alert("pelicula agregada")
+            }else{alert("la pelicula ya esta en su lista")}
+        }else{
+            guarda()
+            alert("pelicula agregada")
+        }
+       
     }
 
     const modalInsertar1 = () => {
@@ -68,13 +97,19 @@ function Tarjeta() {
                     >
                         Ver Trailer
                     </button>
+                    <button
+                       className="btn btn-outline-primary  m-4"
+                        onClick={handleMasTarde}
+                    >
+                        Ver Despues
+                    </button>
                     <Link
                      to="/navbar"> 
                     <button
                     
                    
-                        className="btn btn-outline-info"
-                        onClick={handleReturn}
+                        className="btn btn-outline-danger"
+                   
                     >
                         Volver
                     </button>

@@ -52,12 +52,12 @@ export default class Login extends Component {
         })
     }
     invitado = () => {
-        localStorage.setItem('Invitado',1);
+        localStorage.setItem('Invitado',true);
     }
     
     handleSubmit = (e) => {
         e.preventDefault()
-        localStorage.setItem('Invitado',0);
+        localStorage.setItem('Invitado',false);
         this.iniciarSesion()
     }
     render() {
