@@ -7,15 +7,12 @@ function App({ setMenosValor, setAll, setMasValor, setsearch }) {
     const url = "https://apposcarsue.herokuapp.com/movies/";
     const [peli, setPeli] = useState([])
     const [end, setEnd] = useState(20)
-    console.log(setMenosValor, setAll, setMasValor)
-
-
-
+    let noFind = "";
+    let noFind2 = "";
+    
     const peticionGet = async (url1) => {
         const res = await fetch(url1);
         const data = await res.json();
-        console.log(data)
-
         setPeli(data)
     }
 
@@ -36,8 +33,13 @@ function App({ setMenosValor, setAll, setMasValor, setsearch }) {
 
         setsearch = setsearch.toLowerCase();
         peli2 = peli.filter(movie => movie.title.toLowerCase().includes(setsearch));
-
+           if(!peli2.length){
+        console.log("no encontre")
+        noFind="https://res.cloudinary.com/dky22nhv5/image/upload/v1632084156/buscar_xsyvmf.png"
+        noFind2=`No se encontraron resultados para "${setsearch}"`;
+        }
     }
+ 
     let peli1 = peli2;
 
     if (setMasValor) {
@@ -80,9 +82,13 @@ function App({ setMenosValor, setAll, setMasValor, setsearch }) {
                 }
                        
                         </div>
+        
+      
             </InfiniteScroll>
 
-
+            <img style={{ margin: "auto", display: "flex", width:"420px", height: "330px"}} src={noFind} alt="" />
+           <h1 style={{ width:"100%",margin: "0 auto", display: "flex", justifyContent: "center",textalign: "center"}}>{noFind2}</h1>
+         
         </>
     )
 }
